@@ -55,7 +55,7 @@ CMD ["python", "app.py"]
 Step 4:
  Build the Docker Image
  
- docker build -t external-network-test .
+ docker build -t network-test .
 
 Step 5:
 docker network create external-network
@@ -67,7 +67,7 @@ docker network ls
 Step 6: Run the Container on the External Network
 Start a container using the custom network:
 
-docker run -d --name test-container --network external-network -p 8080:8080 external-network-test
+docker run -d --name test-container --network external-network -p 8080:8080 network-test
 
 
 Step 7: Test Communication
@@ -76,7 +76,7 @@ curl http://localhost:8080
 
 Step 8: To verify container-to-container communication, start another container in the same network:
 
-docker run -it --rm --network external-network alpine sh
+docker run -it --rm --network external-network ubuntu:20.04
 
 Inside the new container, use wget or curl to access the first container by its name:
 
