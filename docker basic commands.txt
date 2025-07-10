@@ -1,11 +1,5 @@
-Day2 Agenda:
 
-Docker in Action 
-Docker File , 
-Running Standalone JAR in a container, 
-Operate Docker HUB, 
-
-basic docker commands 
+Basic docker commands 
 1.docker version 
 2.docker run ---> starts a new container for the given docker image 
 3. docker ps --> list the running containers 
@@ -22,23 +16,22 @@ basic docker commands
 14. docker tag
 15. docker push --> push the created image to public repository 
  
-Hands on: Day1
+Hands on:
 
  docker version 
  docker ps  (lists the running container) 
  docker ps -a   (running and stopped container)
  docker images 
-docker run ubuntu
-docker ps
-docker ps -a
-docker images
-docker run -d -p 8083:80 httpd 
-docker ps
+ docker run ubuntu
+ docker ps
+ docker ps -a
+ docker images
+ docker run -d -p 8083:80 httpd 
+ docker ps
+
 curl localhost:8083
       output : it works 
 browser : localhost:8083 
-
-Day2: Handson 
 
 Demo 1:
    docker run ubuntu:18.04       
@@ -145,18 +138,18 @@ Steps to create the image
 4. docker build -t nameoftheimage:version 
 5. Notice that the image is now available in the local repository 
 6. run the image on top of the container 
-
-Demo 1:
+==================================================================
+Demo :
 create a directory simplehello
 cd simplehello 
-
-Dockerfile    type nul > Dockerfile
+nano Dockerfile
+#Dockerfile   
 FROM ubuntu:18.04
 CMD ["echo","Welcome to my first hello image"]
 
-docker build -t simplehelloamdocs:0.1 . 
+docker build -t hello:0.1 . 
 docker images 
-docker run simplehelloamdocs:0.1
+docker run hello:0.1
 =======================================
 Pushing image to docker hub 
 1. Sign up with docker hub and sign in 
@@ -164,19 +157,15 @@ Pushing image to docker hub
 3. docker login in the command promp
       user name:
       password :
-4. docker tag imageid ksashi/simpleamdocshello:0.1
-5. docker push ksashi/simpleamdocshello:0.1
+4. docker tag imageid vinithcriz/hello:0.1
+5. docker push vinithcriz/hello:0.1
 6. Verify that your image is present in docker hub repository	  
 7. remove the created image from local repository
       docker rmi -f imageid
 
-8. docker run ksashi/simpleamdocshello:0.1
+8. docker run vinithcriz/hello:0.1
 ===============================================
-Demo 2: web application image --simple hello world  springboot application 
 
-Dockerfile 
-
-  
  
    
    
