@@ -30,11 +30,14 @@ exit
 docker stop firstmysqlcontainer
 docker rm firstmysqlcontainer
 
-docker run -v db_data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=dockerpwd -e MYSQL_DATABASE=dockervolumedemo -e MYSQL_USER=docker -e MYSQL_PASSWORD=dockerpwd --name=secondmysqlcontainer -d -p 3306:3306 mysql:5.7
+docker run -v db_data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=dockerpwd -e MYSQL_DATABASE=dockervolumedemo -e MYSQL_USER=docker -e MYSQL_PASSWORD=dockerpwd --name=secondmysqlcontainer -d -p 3306:3306 mysql:8
+
 docker exec -it secondmysqlcontainer bash
 
 mysql -u docker -p1234
+
 use duratechdb;
+
 select * from Persons;
 exit
 exit
