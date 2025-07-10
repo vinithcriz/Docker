@@ -1,0 +1,160 @@
+Docker simple commands
+
+docker version 
+ 
+docker installation 
+ 
+sudo apt-get update
+sudo apt-get install docker.io -y  && sudo apt-get curl -y
+sudo gpasswd -a $USER docker (restart our ubuntu vm)
+
+docker version
+
+demo 1:
+docker run ubuntu:18.04
+
+docker ps 
+
+docker ps -a 
+======================================================
+demo 2:
+docker run -it ubuntu:18.04
+root@containerid#touch sample.txt
+                 ls
+				 
+open a dublicate session 
+docker ps     (view the running container)
+
+1 windows:  exit  - to come out of the container 
+
+docker ps    (now no running containers)
+===========================================
+demo 3:
+           -d detachd mode    -p port forwarding   8080 - host port 80 guest port    httpd - apache application image 
+		   
+docker run -d -p 8080:80 httpd  
+docker ps 
+curl localhost:8080
+ it works 
+ 
+to view in web browser -- enable 8080 port for ubuntu vm 
+web browser : localhost:8080
+
+demo 4: upgrade the apache application 
+docker ps 
+
+docker exec -it containerid bash 
+>ls
+>cd htdocs 
+>ls
+>cat index.html 
+>echo "welcome to Docker session" > index.html 
+>cat index.html 
+
+move to the new terminal : curl localhost:8080
+web browser : refresh 
+
+===================================================
+docker images 
+================
+pid process 
+entry point 
+layers 
+
+pid process ---     process =1 
+
+1. docker run ubuntu
+        pid 1 - ubuntu os 
+    		
+
+2. docker run -it ubuntu -  pid =9808 
+        pid 1 -- bash 
+		 exit  -- pid 1 -- stopped and our container is also stopped 
+		 
+3. docker run -d -p 8080:80 httpd
+
+      application is still running is detached mode
+	  
+	  ubuntu     pid = 4000
+	  bash shell    pid =5006    -- shell 
+	  html -- index.html -- apache application --- pid 1(entry point )
+
+layers 
+docker run -d -p 8080:80 httpd 
+
+first layer : os (ubuntu)
+second layer : java script 
+third layer : application -- httpd   (topmost layer)
+
+docker images are made up of layers 
+1. security --  only topmost layer is mutable 
+2. Reusability -- some layers are reusable from the local system 
+
+===========================================
+docker run -it ubuntu 
+
+ apt-get update 
+ apt-get curl 
+ 
+docker commit ubuntunew 
+
+==========================================================
+Demo 5: 
+creating images 
+
+1. docker commit 
+2. Dockerfile , docker build ( recommended)
+
+creating image using DOckerfile 
+1. create a directory 
+2. cd into directory 
+3. create a file called Dockerfile 
+     Dockerfile - will have the commands to create a image 
+	 Dockerfile --  FROM, RUN, CMD, ADD, ENTRYPOINT (pid process 1)
+4. docker build -t nameoftheimage:versionno 
+
+Dockerfile 
+
+FROM ubuntu:18.04 
+RUN apt-get update 
+RUN apt-get install curl -y
+
+docker build -t ubuntuwithcurl:1.0 .
+
+
+docker ps
+
+docker images 
+
+docker run -it ubuntuwithcurl:1.0 
+
+	 
+	 
+	 
+	 
+
+
+
+
+
+ 
+ 
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+				 
+				 
+				 
+
+
+
+

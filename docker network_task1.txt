@@ -1,0 +1,83 @@
+Set up and test an external network for container communication with the host. 
+
+
+Create a Simple Web Application
+Create a basic Python web server for testing container-host communication.
+
+Step 1:
+
+Create a directory for your project:
+mkdir external-network-test
+cd external-network-test
+
+
+step 2: create app.py 
+app.py
+
+from http.server import SimpleHTTPRequestHandler
+from socketserver import TCPServer
+
+PORT = 8080
+
+class Handler(SimpleHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
+        self.wfile.write(b"Hello from Docker!")
+
+with TCPServer(("", PORT), Handler) as httpd:
+    print(f"Serving on port {PORT}")
+    httpd.serve_forever()
+
+
+Step 3:
+
+Create a Dockerfile:
+
+Create a Dockerfile in the same directory
+
+# Use Python base image
+FROM python:3.9-slim
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the application
+COPY app.py /app/
+
+# Expose the port
+EXPOSE 8080
+
+# Run the Python server
+CMD ["python", "app.py"]
+
+Step 4:
+ Build the Docker Image
+ 
+ docker build -t external-network-test .
+
+Step 5:
+docker network create external-network
+
+
+docker network ls
+
+
+Step 6: Run the Container on the External Network
+Start a container using the custom network:
+
+docker run -d --name test-container --network external-network -p 8080:8080 external-network-test
+
+
+Step 7: Test Communication
+
+curl http://localhost:8080
+
+Step 8: To verify container-to-container communication, start another container in the same network:
+
+docker run -it --rm --network external-network alpine sh
+
+Inside the new container, use wget or curl to access the first container by its name:
+
+wget -qO- http://test-container:8080

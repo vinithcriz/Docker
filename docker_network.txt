@@ -1,0 +1,151 @@
+Docker Network
+
+One of the reasons Docker containers and services are so powerful is that you can connect them together, or connect them to non-Docker workloads.
+
+Docker networking:
+
+Docker uses SDN(Software Define Networking) to create a seperate network on its own. It will create a bridged network and will attach to the host nw
+
+
+Two types of Docker Network 
+Single Host Network (Bridge, Host and None)
+-Bridge networks are best when you need multiple containers to communicate on the same Docker host.(Docker0)
+-Host networks are best when the network stack should not be isolated from the Docker host, but you want other aspects of the container to be isolated.
+-None network will not configure any IP for the container and doesn’t have any access to the external network as well as for other containers- Used for running batch jobs  
+
+
+Multihost Network
+-Overlay networks are best when you need containers running on different Docker hosts to communicate, or when multiple applications work together using swarm(orchestration) services.
+
+Single Host 
+
+One container to communicate with another container -- can use IP address, link(deprecated), container name(recommended)
+
+ 
+Demo 
+
+To look into the docker interface details we have to install the bridge-utils
+ 
+
+ip a
+
+docker info -- detailed info of docker 
+
+docker network inspect bridge 
+
+sudo apt-get install bridge-utils
+
+brctl show docker0   -   shows the  Network Interfaces  for running containers
+
+docker run -d -p 8080:80 httpd
+
+docker inspect containerid       --- to have a detailed view of the container and note the ip address of the container 
+
+curl ipaddressofcontainer:80  -- this is the confirmation that we can access the container from host machine 
+curl localhost:8080
+
+
+
+brctl show
+
+
+demo 2:
+mkdir netimg
+cd netimg 
+
+vi Dockerfile
+FROM ubuntu:18.04
+RUN apt-get update  && apt-get install -y iputils-ping traceroute
+ENTRYPOINT ["/bin/bash"]
+
+docker build -t net-img .
+
+docker run -it --name=net1 net-img
+
+
+traceroute  8.8.8.8 (inside the container)
+
+
+brctl show  (another dublicate window)
+
+
+Demo 3: 
+two continers 
+from one container ping to another container -- bridge network 
+
+1. container 
+docker run -it ubuntu:18.04 
+apt-get update
+apt-get install -y iputils-ping 
+ping google.com
+ping ipaddressofsecondcontainer
+
+(in a seperate window note the ipaddress of second container by using a command docker inspect containerid of second container)
+
+2. container 
+docker run -it ubuntu:18.04
+
+
+Demo 4:
+
+
+service docker stop
+
+sudo ip link del docker0                           
+
+sudo vi /etc/docker/daemon.json  
+
+{ "bip" : "10.0.0.1/24" }                    
+:wq
+
+service docker start
+
+ip a
+
+docker run -it ubuntu:18.04 /bin/bash  (contianer ip address )
+
+
+demo 5:(example to use different protocol for a application)
+
+docker run 	-d -p 8080:80/udp --name=web2 httpd   #Changing the protocol
+
+
+
+
+To manage networks  
+
+docker network COMMAND
+
+
+docker network create	Create a network
+docker network connect	Connect a container to a network
+docker network disconnect	Disconnect a container from a network
+docker network inspect	Display detailed information on one or more networks
+docker network ls	List networks
+docker network prune	Remove all unused networks
+docker network rm	Remove one or more networks
+
+
+
+
+docker system prune   
+docker container prune    
+
+
+break for 10 mins 
+
+Please complete docker network handson. Once completed give a done message in the chat 
+
+
+
+
+
+
+
+
+
+
+
+
+
+

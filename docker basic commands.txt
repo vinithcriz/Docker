@@ -1,0 +1,182 @@
+Day2 Agenda:
+
+Docker in Action 
+Docker File , 
+Running Standalone JAR in a container, 
+Operate Docker HUB, 
+
+basic docker commands 
+1.docker version 
+2.docker run ---> starts a new container for the given docker image 
+3. docker ps --> list the running containers 
+4. docker ps -a --> list the running and stopped containers 
+5. docker exec --> execute some commands on running container (to connect with the running container)
+6. docker stop --> stops the running container(graceful shutdown)
+7. docker kill ---> stops the container(forcing to stop)
+8. docker images ---> lists the image present in local repository 
+9. docker rm -f containerid -- remove the container permanently from our docker host 
+10. docker rmi -f imageid
+11. docker pull -- will pull the image from global repository to local repository 
+12. docker inspect -- detailed information about the running container  
+13. docker build --> to create our own docker images 
+14. docker tag
+15. docker push --> push the created image to public repository 
+ 
+Hands on: Day1
+
+ docker version 
+ docker ps  (lists the running container) 
+ docker ps -a   (running and stopped container)
+ docker images 
+docker run ubuntu
+docker ps
+docker ps -a
+docker images
+docker run -d -p 8083:80 httpd 
+docker ps
+curl localhost:8083
+      output : it works 
+browser : localhost:8083 
+
+Day2: Handson 
+
+Demo 1:
+   docker run ubuntu:18.04       
+   docker ps
+   docker ps -a 
+
+
+Demo 2:  (interactive terminal)
+   docker run -it ubuntu:18.04     
+   root@ihh#
+           # exit 
+   
+   docker ps -- another command prompt
+   interactive terminal(bash shell)
+   
+Demo 3: deploy apache application(httpd) in a container
+   
+ docker run -d -p 8084:80 httpd 
+ docker ps
+ curl localhost:8084
+       it works 
+ browser localhost:8084         
+ 
+ -d -- detached mode 
+ -p port forwarding 
+ 80 - guest port (application port)
+ 8084:80   (8084 - host port)
+ 
+Demo: 4 upgrade the apache application 
+docker exec -it containerid bash 
+#ls
+#cd htdocs
+#ls
+#cat index.html
+#echo "welcome to docker session">index.html
+#cat index.html
+#exit
+
+curl localhost:8084
+     welcome to docker session
+browser : localhost:8084 
+======================================================
+pid process  (process id)
+entry point 
+layers 
+
+pid process = 1   -- when pid 1 stops the contianer stops 
+
+docker run ubuntu:18.04
+   pid =1  --os 
+
+   
+
+docker run -it ubuntu:18.04 
+    pid -- 1212 ---    os 
+	pid =1  ----	bash shell
+   # exit
+   
+   
+docker run -d -p 8083:80 httpd
+     docker exec -it containerid bash 
+	 # exit 
+	docker ps 
+	
+ubuntu pid --  1234
+bash shell pid -- 1111
+httpd pid --1 	
+
+===================================
+entry point of the image will have the pid process 1
+
+Layers  
+   when we pull the docker images -- it is pulled as several layers 
+   
+   httpd 
+   os layer -- linux(ubuntu:18.04)     layer 1
+   sowtware -- java   -- layer 2
+   app  -- httpd    -- layer 3 -- writable layer 
+   
+   httpdamdocs 
+   os layer -- linux(ubuntu:18.04)     layer 1
+   sowtware -- java   -- layer 2
+   upgraded -- httpd layer 3
+ 
+demo 5: 
+   docker commit containerid amdocshttpd:1.0
+   
+   docker images 
+==================================================
+Creating our own docker images and pushing into docker hub 
+
+creating docker images 
+1. docker commit (not recommended)
+2. Dockerfile (hands on)(recommended)
+3. Third party plugin (Java -- Fabric plugin)
+
+Dockerfile 
+    It will have instructions to create the image
+	     RUN ADD CMD ENTRYPOINT 
+Steps to create the image 
+1. create a directory 
+2. Move into the directory 
+3. Create a Dockerfile 
+4. docker build -t nameoftheimage:version 
+5. Notice that the image is now available in the local repository 
+6. run the image on top of the container 
+
+Demo 1:
+create a directory simplehello
+cd simplehello 
+
+Dockerfile    type nul > Dockerfile
+FROM ubuntu:18.04
+CMD ["echo","Welcome to my first hello image"]
+
+docker build -t simplehelloamdocs:0.1 . 
+docker images 
+docker run simplehelloamdocs:0.1
+=======================================
+Pushing image to docker hub 
+1. Sign up with docker hub and sign in 
+2. create a repository -- with the name of the image 
+3. docker login in the command promp
+      user name:
+      password :
+4. docker tag imageid ksashi/simpleamdocshello:0.1
+5. docker push ksashi/simpleamdocshello:0.1
+6. Verify that your image is present in docker hub repository	  
+7. remove the created image from local repository
+      docker rmi -f imageid
+
+8. docker run ksashi/simpleamdocshello:0.1
+===============================================
+Demo 2: web application image --simple hello world  springboot application 
+
+Dockerfile 
+
+  
+ 
+   
+   

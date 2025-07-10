@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  web:
+    image: flask-custom-image  # use your built image name
+    ports:
+      - "5000:5000"

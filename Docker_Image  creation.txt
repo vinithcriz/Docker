@@ -1,0 +1,130 @@
+PID in docker
+
+
+docker images 
+================
+pid process 
+entry point 
+layers 
+
+pid process ---     process =1 
+
+1. docker run ubuntu
+        pid 1 - ubuntu os 
+    		
+
+2. docker run -it ubuntu -  pid =9808 
+        pid 1 -- bash 
+		 exit  -- pid 1 -- stopped and our container is also stopped 
+		 
+3. docker run -d -p 8080:80 httpd
+
+      application is still running is detached mode
+	  
+	  ubuntu     pid = 4000
+	  bash shell    pid =5006    -- shell 
+	  html -- index.html -- apache application --- pid 1(entry point )
+
+=======================================================
+creating images 
+
+1. docker commit 
+2. Dockerfile , docker build ( recommended)
+3. plugins
+
+creating image using DOckerfile 
+1. create a directory 
+2. cd into directory 
+3. create a file called Dockerfile 
+     Dockerfile - will have the commands to create a image 
+	 Dockerfile --  FROM, RUN, CMD, ADD, ENTRYPOINT (pid process 1)
+4. docker build -t nameoftheimage:versionno 
+
+
+example 1:
+Dockerfile 
+
+FROM ubuntu:18.04 
+RUN apt-get update 
+RUN apt-get install curl -y
+
+docker build -t ubuntuwithcurl:1.0 .
+
+
+docker ps
+
+docker images 
+
+docker run -it ubuntuwithcurl:1.0 
+=========================================================
+
+example 2:
+Dockerfile 
+FROM ubuntu:20.04
+CMD ["echo","Welcome to my first image"]
+==============================================
+docker layers
+
+==============================================================
+Docker Images -- java application 
+
+Dockerfile 
+FROM openjdk:11.0.12-jdk-slim
+ADD *.jar app1.jar
+ENTRYPOINT ["sh","-c","java -jar /app1.jar"]
+EXPOSE 8080
+
+or 
+
+Dockerfile 
+FROM ubuntu:20.04
+apt install openjdk-11-jdk
+ADD *.jar app1.jar
+ENTRYPOINT ["sh","-c","java -jar /app1.jar"]
+EXPOSE 8080
+
+
+FROM ubuntu:20.04
+apt install openjdk-11-jdk
+
+
+www.lms.com/student
+www.lms.com/faculty
+www.lms.com/courses
+
+
+www.flipkart.com/mobile-phone
+=======================================================
+Java springboot application 
+
+Step 1: creating docker image 
+download the folder 
+cd into the folder 
+
+docker build -t duraspringhello:1.0 .
+
+docker images
+
+docker run -d -p 8082:8080 duraspringhello:1.0
+
+docker ps 
+
+curl localhost:8082 
+
+browser : localhost:8082
+
+step 2:
+pushing into docker hub 
+
+
+
+1. Step 1 has to be completed 
+
+2. create a repository in docker hub (eg duraspringhello)
+   
+3. tag the image 
+       docker tag imageid ksashi/duraspringhello:1.0
+4. docker login 
+    username 
+	password 
+5. docker push ksashi/duraspringhello:1.0

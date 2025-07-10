@@ -1,0 +1,42 @@
+docker volume create db_data
+docker volume ls
+
+
+docker run -v db_data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=duratechdb -e MYSQL_USER=docker -e MYSQL_PASSWORD=1234 --name=firstmysqlcontainer -d -p 3306:3306 mysql:8
+
+docker exec -it firstmysqlcontainer bash
+
+mysql -u docker -p1234
+show databases;
+
+use duratechdb;
+
+CREATE TABLE Persons (
+    PersonID int(10),
+    LastName varchar(100),
+    FirstName varchar(100),
+    Address varchar(100),
+    City varchar(100)
+);
+
+INSERT INTO Persons (PersonID, LastName, FirstName, Address, City)
+VALUES (1, 'lorenzo', 'jeorge', 'kl', 'Coimbatore');
+INSERT INTO Persons (PersonID, LastName, FirstName, Address, City)
+VALUES (2, 'tr', ' silambarasan', 'Bangalore', 'India');
+select * from Persons;
+exit
+exit
+
+docker stop firstmysqlcontainer
+docker rm firstmysqlcontainer
+
+docker run -v db_data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=dockerpwd -e MYSQL_DATABASE=dockervolumedemo -e MYSQL_USER=docker -e MYSQL_PASSWORD=dockerpwd --name=secondmysqlcontainer -d -p 3306:3306 mysql:5.7
+docker exec -it secondmysqlcontainer bash
+
+mysql -u docker -p1234
+use duratechdb;
+select * from Persons;
+exit
+exit
+
+docker volume ls
