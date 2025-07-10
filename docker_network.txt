@@ -86,31 +86,9 @@ ping ipaddressofsecondcontainer
 docker run -it ubuntu:18.04
 
 
-Demo 4:
-
-
-service docker stop
-
-sudo ip link del docker0                           
-
-sudo vi /etc/docker/daemon.json  
-
-{ "bip" : "10.0.0.1/24" }                    
-:wq
-
-service docker start
-
 ip a
 
 docker run -it ubuntu:18.04 /bin/bash  (contianer ip address )
-
-
-demo 5:(example to use different protocol for a application)
-
-docker run 	-d -p 8080:80/udp --name=web2 httpd   #Changing the protocol
-
-
-
 
 To manage networks  
 
@@ -132,9 +110,6 @@ docker system prune
 docker container prune    
 
 
-break for 10 mins 
-
-Please complete docker network handson. Once completed give a done message in the chat 
 
 
 
